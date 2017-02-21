@@ -420,7 +420,7 @@
 				MX6QDL_PAD_DISP0_DAT2__ECSPI3_MISO           0x100b1
 				MX6QDL_PAD_DISP0_DAT1__ECSPI3_MOSI           0x100b1
 				MX6QDL_PAD_DISP0_DAT0__ECSPI3_SCLK           0x100b1
-				/*  CS SPI 3  */
+				/*  CS SPI 2  */
 				MX6QDL_PAD_DISP0_DAT3__GPIO4_IO24            0x80000000
 			>;
 		};
@@ -689,7 +689,11 @@
 	pinctrl-names           = "default";
 	pinctrl-0               = <&pinctrl_ecspi2>;
 	status                  = "okay";
-
+	spidev@0x00{
+	compatible = "spidev";
+	spi-max-frequency = <1000000>;
+	reg = <0>;
+	}; 
 };
 
 
@@ -701,8 +705,8 @@
 	status                  = "okay";
 	
 	rtc: pcf2123@1 {
-                compatible        = "nxp,pcf2123";
-                reg               = <1>;
+		compatible        = "nxp,rtc-pcf2123";
+		reg               = <0>;
                 spi-max-frequency = <1000000>;
                 spi-cs-high;
     	};
