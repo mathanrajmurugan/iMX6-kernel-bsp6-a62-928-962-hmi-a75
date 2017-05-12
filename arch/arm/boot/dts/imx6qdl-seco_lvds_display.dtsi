@@ -1,10 +1,10 @@
 &ldb {
 	status = "okay";
-
+	split-mode;
 	lvds-channel@0 {
 		reg = <0>;
-		fsl,data-mapping = "spwg";
-		fsl,data-width = <18>;
+		fsl,data-mapping = "jeida";
+		fsl,data-width = <24>;
 		status = "okay";
 		primary;
 
@@ -85,15 +85,27 @@
 			};
 
 			timing6: LDB-1080P60 {
-				clock-frequency = <0x7bfa480>;
-				hactive = <0x780>;
-				vactive = <0x438>;
-				hback-porch = <0x64>;
-				hfront-porch = <0x28>;
-				vback-porch = <0x1e>;
-				vfront-porch = <0x2>;
-				hsync-len = <0xa>;
-				vsync-len = <0x2>;
+				clock-frequency = <141200000>;
+				hactive = <1920>;
+				vactive = <1080>;
+				hback-porch = <88>;
+				hfront-porch = <58>;
+				vback-porch = <14>;
+				vfront-porch = <8>;
+				hsync-len = <42>;
+				vsync-len = <14>;
+			};
+	
+			timing7: LDB-1280P60 {
+			        clock-frequency = <66100000>;
+			        hactive = <1280>;
+			        vactive = <800>;
+			        hback-porch = <35>;
+			        hfront-porch = <35>;
+			        vback-porch = <4>;
+			        vfront-porch = <4>;
+			        hsync-len = <10>;
+			        vsync-len = <2>;
 			};
 
 		};
@@ -101,15 +113,15 @@
 
 	lvds-channel@1 {
 		reg = <1>;
-		fsl,data-mapping = "spwg";
-		fsl,data-width = <18>;
-		status = "okay";
+		fsl,data-mapping = "jeida";
+		fsl,data-width = <24>;
+		status = "disabled";
 
 		crtc = "ipu2-di1";
 		display-timings {
-			native-mode = <&timing7>;
+			native-mode = <&timing8>;
 
-			timing7: seco_lvds1 {
+			timing8: seco_lvds1 {
 				clock-frequency = <38000000>;
 				hactive = <800>;
 				vactive = <480>;

@@ -10,6 +10,7 @@
  * http://www.gnu.org/copyleft/gpl.html
  */
 
+#include <linux/can/platform/flexcan.h>
 #include <linux/clk.h>
 #include <linux/clkdev.h>
 #include <linux/cpu.h>
@@ -28,6 +29,7 @@
 #include <linux/pm_opp.h>
 #include <linux/pci.h>
 #include <linux/phy.h>
+#include <linux/spi/spi.h>
 #include <linux/reboot.h>
 #include <linux/regmap.h>
 #include <linux/micrel_phy.h>
@@ -48,6 +50,13 @@ static int power_gpio = -1;
 static int power_gpio_pol = 0;
 static int only_for_poweroff = 0;
 
+
+static struct flexcan_platform_data flexcan_pdata[2];
+static int flexcan_en_gpio;
+static int flexcan_stby_gpio;
+static int flexcan0_en;
+static int flexcan1_en;
+
 static char *audio_options __read_mostly;
 static int __init early_audio_codec (char *options) {
 	audio_options = options;
@@ -63,6 +72,64 @@ static int __init early_serial_device (char *options) {
         return 0;
 }
 early_param("serial_dev", early_serial_device);
+
+static void mx6q_flexcan_switch(void)
+{
+	if (flexcan0_en || flexcan1_en) {
+		/*
+		 * The transceiver TJA1041A on sabreauto RevE baseboard will
+		 * fail to transit to Normal state if EN/STBY is high by default
+		 * after board power up. So we set the EN/STBY initial state to low
+		 * first then to high to guarantee the state transition successfully.
+		 */
+		gpio_set_value_cansleep(flexcan_en_gpio, 0);
+		gpio_set_value_cansleep(flexcan_stby_gpio, 0);
+
+		gpio_set_value_cansleep(flexcan_en_gpio, 1);
+		gpio_set_value_cansleep(flexcan_stby_gpio, 1);
+	} else {
+		/*
+		 * avoid to disable CAN xcvr if any of the CAN interfaces
+		 * are down. XCRV will be disabled only if both CAN2
+		 * interfaces are DOWN.
+		*/
+		gpio_set_value_cansleep(flexcan_en_gpio, 0);
+		gpio_set_value_cansleep(flexcan_stby_gpio, 0);
+	}
+}
+
+static void imx6q_flexcan0_switch_auto(int enable)
+{
+	flexcan0_en = enable;
+	mx6q_flexcan_switch();
+}
+
+static void imx6q_flexcan1_switch_auto(int enable)
+{
+	flexcan1_en = enable;
+	mx6q_flexcan_switch();
+}
+
+static int __init imx6q_flexcan_fixup_auto(void)
+{
+	struct device_node *np;
+
+	np = of_find_node_by_path("/soc/aips-bus@02000000/can@02090000");
+	if (!np)
+		return -ENODEV;
+
+	flexcan_en_gpio = of_get_named_gpio(np, "trx-en-gpio", 0);
+	flexcan_stby_gpio = of_get_named_gpio(np, "trx-stby-gpio", 0);
+	if (gpio_is_valid(flexcan_en_gpio) && gpio_is_valid(flexcan_stby_gpio) &&
+		!gpio_request_one(flexcan_en_gpio, GPIOF_DIR_OUT, "flexcan-trx-en") &&
+		!gpio_request_one(flexcan_stby_gpio, GPIOF_DIR_OUT, "flexcan-trx-stby")) {
+		/* flexcan 0 & 1 are using the same GPIOs for transceiver */
+		flexcan_pdata[0].transceiver_switch = imx6q_flexcan0_switch_auto;
+		flexcan_pdata[1].transceiver_switch = imx6q_flexcan1_switch_auto;
+	}
+
+	return 0;
+}
 
 static inline int __init set_device_mode (const char *node_name, const char *sel_mode) {
 	struct device_node *np, *entry;
@@ -659,6 +726,7 @@ void imx6q_restart (enum reboot_mode reboot_mode, const char *cmd) {
 static void __init imx6q_init_late(void)
 {
 	struct device_node *np;
+        int can_en_gpio;
 
 	/*
 	 * WAIT mode is broken on TO 1.0 and 1.1, so there is no point
@@ -683,6 +751,36 @@ static void __init imx6q_init_late(void)
 		power_gpio_pol = of_property_read_bool(np, "set_high");
 		only_for_poweroff = of_property_read_bool(np, "only_for_poweroff");
 		np = NULL;
+	}
+
+	if (of_machine_is_compatible("fsl,imx6q-sabreauto")
+		|| of_machine_is_compatible("fsl,imx6dl-sabreauto"))
+		imx6q_flexcan_fixup_auto();
+
+
+	if ( of_machine_is_compatible("fsl,imx6q-quadmo747_928")
+		|| of_machine_is_compatible("fsl,imx6dl-quadmo747_928")
+		|| of_machine_is_compatible("fsl,imx6q-uq7_962")
+		|| of_machine_is_compatible("fsl,imx6dl-uq7_962"))
+	{
+		np = of_find_node_by_path ("/serial_switch");
+		if ( np ) {
+
+			can_en_gpio = of_get_named_gpio (np, "selector", 0);
+
+			if ( gpio_is_valid(can_en_gpio) &&
+				!gpio_request_one(can_en_gpio, GPIOF_DIR_OUT, "can-en") ) {
+
+				if ( serial_options ) {
+					if ( strcmp (serial_options, "flexcan") == 0 )
+						gpio_set_value_cansleep(can_en_gpio, 0);
+					else
+						gpio_set_value_cansleep(can_en_gpio, 1);
+				} else
+					gpio_set_value_cansleep(can_en_gpio, 1);
+			}
+
+		}
 	}
 }
 

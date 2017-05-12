@@ -713,6 +713,7 @@ static const struct of_device_id spidev_dt_ids[] = {
 MODULE_DEVICE_TABLE(of, spidev_dt_ids);
 #endif
 
+
 /*-------------------------------------------------------------------------*/
 
 static int spidev_probe(struct spi_device *spi)
@@ -729,7 +730,7 @@ static int spidev_probe(struct spi_device *spi)
 	if (spi->dev.of_node && !of_match_device(spidev_dt_ids, &spi->dev)) {
 		dev_err(&spi->dev, "buggy DT: spidev listed directly in DT\n");
 		WARN_ON(spi->dev.of_node &&
-			!of_match_device(spidev_dt_ids, &spi->dev));
+			!of_match_device(spidev_dt_ids, &spi->dev));		
 	}
 
 	/* Allocate driver data */
