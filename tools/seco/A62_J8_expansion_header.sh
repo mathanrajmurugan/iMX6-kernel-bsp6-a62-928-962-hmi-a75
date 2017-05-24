@@ -5,7 +5,7 @@
 #			   PARAMETRI   			#
 #------------------------------------------------------#
 
-CROSS_COMPILER="/opt/yocto/fsl-release-bsp/build_seco/tmp/sysroots/x86_64-linux/usr/bin/arm-poky-linux-gnueabi/arm-poky-linux-gnueabi-"
+CROSS_COMPILER="/opt/yocto/fsl-release-bsp/build_seco_5.2/tmp/sysroots/x86_64-linux/usr/bin/arm-poky-linux-gnueabi/arm-poky-linux-gnueabi-"
 
 OUTPUT_DTS="imx6qdl-seco_SBC_A62_J8.dtsi"		# file che creerà lo script (solo filename, senza il path)
 
@@ -143,7 +143,7 @@ echo -e "
 	
 	&ecspi2 {status=\"${SPI2}\";
 		fsl,spi-num-chipselects = <1>;
-		//cs-gpios = <&gpio3 24  0>;
+		cs-gpios = <&gpio3 24  0>;
 		pinctrl-names = \"default\";
 		pinctrl-0 = <&pinctrl_ecspi2>; };
 
@@ -538,15 +538,15 @@ top_menu=0
 			--menu "Press <ESC> to quit without save" 21 60 9 \
 			--ok-button "ENTER" \
 			--cancel-button "NEXT" \
-			"1" "Port Group 1" \
-			"2" "Port Group 2" \
-			"3" "Port Group 3" \
-			"4" "Port Group 4" \
-			"5" "Port Group 5" \
-			"6" "Port Group 6" \
-			"7" "Port Group 7" \
-			"8" "Port Group 8" \
-			"9" "Port Group 9-10"  3>&1 1>&2 2>&3)
+			"1" "Port 1" \
+			"2" "Port 2" \
+			"3" "Port 3" \
+			"4" "Port 4" \
+			"5" "Port 5" \
+			"6" "Port 6" \
+			"7" "Port 7" \
+			"8" "Port 8" \
+			"9" "Port 9-10"  3>&1 1>&2 2>&3)
 		top_menu_exitstatus=$?
 		if [ $top_menu_exitstatus -eq 0 ]; then
 			case $top_menu in
@@ -1066,29 +1066,29 @@ esac
 
 
 # Creazione dts
-if [ -f "${OUTPUT_DIR}/${OUTPUT_DTS}" ]; then
-	Messaggio1="A backup will be stored in \n${OUTPUT_DIR}/${OUTPUT_DTS}_backup"
-	Sovrascritto1="=> ${OUTPUT_DIR}/${OUTPUT_DTS}"
-fi
+#if [ -f "${OUTPUT_DIR}/${OUTPUT_DTS}" ]; then
+#	Messaggio1="A backup will be stored in \n${OUTPUT_DIR}/${OUTPUT_DTS}_backup"
+#	Sovrascritto1="=> ${OUTPUT_DIR}/${OUTPUT_DTS}"
+#fi
 
 Sovrascritto2=""
 Messaggio2=""
 
 if (whiptail --title "Saving the .dts?" --yes-button "NEXT" --no-button "EXIT"  --yesno "Save the .dts destination file?\n Note that the following file will be overwritted: \n  ${Sovrascritto1}\n  ${Sovrascritto2} \n\n${Messaggio1}\n\n${Messaggio2}" 20 60) then
 
-	if [ -f "${OUTPUT_DIR}/${OUTPUT_DTS}" ]; then
-		cp -rf ${OUTPUT_DIR}/${OUTPUT_DTS} ${OUTPUT_DIR}/${OUTPUT_DTS}_backup
-		if [ "$?" -ne "0" ];then
-			echo ""
-			echo "----------------------------------"
-			echo " Cannot create a backup copy of"
-			echo "${OUTPUT_DIR}/${OUTPUT_DTS}"
-			echo "Exit in order to prevent data lost"
-			echo "----------------------------------"
-			echo ""
-			exit 1
-		fi
-	fi
+#	if [ -f "${OUTPUT_DIR}/${OUTPUT_DTS}" ]; then
+#		#cp -rf ${OUTPUT_DIR}/${OUTPUT_DTS} ${OUTPUT_DIR}/${OUTPUT_DTS}_backup
+#		if [ "$?" -ne "0" ];then
+#			echo ""
+#			echo "----------------------------------"
+#			echo " Cannot create a backup copy of"
+#			echo "${OUTPUT_DIR}/${OUTPUT_DTS}"
+#			echo "Exit in order to prevent data lost"
+#			echo "----------------------------------"
+#			echo ""
+#			exit 1
+#		fi
+#	fi
 
 	create_dts	
 	include_dts ${OUTPUT_DIR}/${A62_QUAD_DTS}	
