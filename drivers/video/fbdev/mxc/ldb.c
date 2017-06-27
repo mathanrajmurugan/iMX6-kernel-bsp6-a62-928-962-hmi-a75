@@ -690,45 +690,6 @@ static int ldb_init(struct mxc_dispdrv_handle *mddh,
 
 	chan = &ldb->chan[chno];
 
-	if ( bits_per_pixel(setting->if_fmt) != 18 &&
-			bits_per_pixel(setting->if_fmt) != 24 ) {
-		ret = of_property_read_u32(chan->np_timings, "fsl,data-width",
-				&data_width);
-		if (ret || (data_width != 18 && data_width != 24)) {
-			dev_err(dev, "data width not specified or invalid\n");
-			return -EINVAL;
-		}
-	} else {
-		data_width = bits_per_pixel(setting->if_fmt);
-	}
-
-	mapping = of_get_data_mapping(chan->np_timings);
-	switch (mapping) {
-		case LVDS_BIT_MAP_SPWG:
-			if (data_width == 24) {
-				if (chno == 0 || ldb->spl_mode || ldb->dual_mode)
-					ldb->ctrl |= LDB_DATA_WIDTH_CH0_24;
-				if (chno == 1 || ldb->spl_mode || ldb->dual_mode)
-					ldb->ctrl |= LDB_DATA_WIDTH_CH1_24;
-			}
-			break;
-		case LVDS_BIT_MAP_JEIDA:
-			if (data_width == 18) {
-				dev_err(dev, "JEIDA only support 24bit\n");
-				return -EINVAL;
-			}
-			if (chno == 0 || ldb->spl_mode || ldb->dual_mode)
-				ldb->ctrl |= LDB_DATA_WIDTH_CH0_24 |
-					LDB_BIT_MAP_CH0_JEIDA;
-			if (chno == 1 || ldb->spl_mode || ldb->dual_mode)
-				ldb->ctrl |= LDB_DATA_WIDTH_CH1_24 |
-					LDB_BIT_MAP_CH1_JEIDA;
-			break;
-		default:
-			dev_err(dev, "data mapping not specified or invalid\n");
-			return -EINVAL;
-	}
-
 	crtc = of_get_crtc_mapping(chan->np_timings);
 	if (is_valid_crtc(ldb, crtc, chan->chno)) {
 		ldb->chan[chno].crtc = crtc;
@@ -898,8 +859,6 @@ static int ldb_probe(struct platform_device *pdev)
 			ldb->primary_chno = chan->chno;
 
 		chan->np_timings = child;
-		if (ret)
-			return -EINVAL;
 
 		sprintf(clkname, "ldb_di%d", i);
 		ldb->ldb_di_clk[i] = devm_clk_get(dev, clkname);

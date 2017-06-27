@@ -39,13 +39,13 @@
 	status = "okay";
 };
 
-&mxcfb3 {
-	status = "okay";
-};
-
-&mxcfb4 {
-	status = "okay";
-};
+//&mxcfb3 {
+//	status = "okay";
+//};
+//
+//&mxcfb4 {
+//	status = "okay";
+//};
 
 &sata {
 	status = "okay";
