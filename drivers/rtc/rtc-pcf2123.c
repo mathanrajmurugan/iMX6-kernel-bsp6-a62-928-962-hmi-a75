@@ -829,6 +829,8 @@ static int pcf2123_probe(struct spi_device *spi)
 	if (ret)
 		dev_err(&spi->dev, "failed to create alarm attribute, %d\n", ret);
 
+	rtc->uie_unsupported = 1;
+
 	return 0;
 
 sysfs_exit:

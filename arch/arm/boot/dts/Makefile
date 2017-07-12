@@ -335,10 +335,12 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
 	imx6qp-seco_SBC_A62.dtb \
 	imx6qp-seco_quadmo747_928.dtb \
 	imx6q-seco_uq7-j_A75.dtb \
+	imx6q-seco_SBC_984.dtb \
 	imx6dl-seco_quadmo747_928.dtb \
 	imx6dl-seco_uq7_962.dtb \
 	imx6dl-seco_SBC_A62.dtb \
 	imx6dl-seco_uq7-j_A75.dtb \
+	imx6dl-seco_SBC_984.dtb \
 	imx6q-wandboard.dtb \
 	imx6q-wandboard-revb1.dtb
 dtb-$(CONFIG_SOC_IMX6SL) += \

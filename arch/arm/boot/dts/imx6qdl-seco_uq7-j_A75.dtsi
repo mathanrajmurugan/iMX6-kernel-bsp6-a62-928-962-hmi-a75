@@ -561,8 +561,8 @@
 	pinctrl-names = "default";
 	pinctrl-0     = <&pinctrl_usdhc4>;
 	bus-width     = <4>;
-	cd-gpios      = <&gpio2 6 0>;
-	wp-gpios      = <&gpio5 20 0>;
+	cd-gpios      = <&gpio2 6 GPIO_ACTIVE_LOW>;
+	wp-gpios      = <&gpio5 20 GPIO_ACTIVE_HIGH>;
 	keep-power-in-suspend;
 	enable-sdio-wakeup;
 	no-1-8-v;
@@ -604,7 +604,7 @@
 	status                  = "okay";
 
 	rtc: pcf2123@1 {
-		compatible        = "nxp,pcf2123";
+		compatible        = "nxp,rtc-pcf2123";
 		reg               = <0>;
 		spi-max-frequency = <1000000>;
 		spi-cs-high;
