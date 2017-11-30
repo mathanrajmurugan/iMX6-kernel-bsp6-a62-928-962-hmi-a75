@@ -1,0 +1,309 @@
+/*
+ * Copyright 2012 Freescale Semiconductor, Inc.
+ * Copyright 2011 Linaro Ltd.
+ *
+ * The code contained herein is licensed under the GNU General Public
+ * License. You may obtain a copy of the GNU General Public License
+ * Version 2 or later at the following locations:
+ *
+ * http://www.opensource.org/licenses/gpl-license.html
+ * http://www.gnu.org/copyleft/gpl.html
+ */
+
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/gpio/gpio.h>
+
+
+/*  __________________________________________________________________________
+ * |                                                                          |
+ * |                            IOMUX EXPANSION J8                            |
+ * |__________________________________________________________________________|
+ */
+/// {
+&iomuxc {
+
+	imx6qdl-SBC_A62 {
+
+/*  ____________________________________________________________________________
+ * |__________________________________ PORT1 ___________________________________|
+*/
+		/*  NONE */
+
+/*  ____________________________________________________________________________
+ * |__________________________________ PORT2 ___________________________________|
+*/
+		pinctrl_j8_port2_1: j8_port2grp1 {	/* SPI2 */
+			fsl,pins = <
+				MX6QDL_PAD_EIM_CS0__ECSPI2_SCLK              0x100b1
+				MX6QDL_PAD_EIM_CS1__ECSPI2_MOSI              0x100b1
+				MX6QDL_PAD_EIM_OE__ECSPI2_MISO               0x100b1
+				/*  CS SPI 2  */
+				MX6QDL_PAD_EIM_D24__GPIO3_IO24               0x80000000
+			>;
+		};
+
+
+/*  ____________________________________________________________________________
+ * |__________________________________ PORT3 ___________________________________|
+*/
+		pinctrl_j8_port3_1: j8_port3grp1 {	/* CAN1 */
+			fsl,pins = <
+				MX6QDL_PAD_GPIO_7__FLEXCAN1_TX               0x80000000
+				MX6QDL_PAD_GPIO_8__FLEXCAN1_RX               0x80000000
+			>;
+		};
+
+
+/*  ____________________________________________________________________________
+ * |__________________________________ PORT4 ___________________________________|
+*/
+		pinctrl_j8_port4_1: j8_port4grp1 {  /* UART4 FULL */
+			fsl,pins = <
+				MX6QDL_PAD_CSI0_DAT17__UART4_CTS_B           0x1b0b1
+				MX6QDL_PAD_CSI0_DAT16__UART4_RTS_B           0x1b0b1
+				MX6QDL_PAD_CSI0_DAT12__UART4_TX_DATA         0x1b0b1
+				MX6QDL_PAD_CSI0_DAT13__UART4_RX_DATA         0x1b0b1
+			>;
+		};
+
+		pinctrl_j8_port4_2: j8_port4grp2 {	/* UART4 TX/RX */
+			fsl,pins = <
+				MX6QDL_PAD_CSI0_DAT12__UART4_TX_DATA         0x1b0b1
+				MX6QDL_PAD_CSI0_DAT13__UART4_RX_DATA         0x1b0b1
+			>;
+		};
+
+
+/*  ____________________________________________________________________________
+ * |__________________________________ PORT5 ___________________________________|
+*/
+		pinctrl_j8_port5_1: j8_port5grp1 {	/* SPDIF */
+			fsl,pins = <
+				MX6QDL_PAD_EIM_D21__SPDIF_IN                 0x1b0b0
+				MX6QDL_PAD_GPIO_19__SPDIF_OUT                0x1b0b0
+			>;
+		};
+
+		pinctrl_j8_port5_2: j8_port5grp2 {	/* I2C1 */
+			fsl,pins = <
+				MX6QDL_PAD_EIM_D28__I2C1_SDA                 0x4001b8b1
+				MX6QDL_PAD_EIM_D21__I2C1_SCL                 0x4001b8b1
+			>;
+		};
+
+
+/*  ____________________________________________________________________________
+ * |__________________________________ PORT6 ___________________________________|
+*/
+		pinctrl_j8_port6_1: j8_port6grp1 {	/* SDIO1 4BIT */
+			fsl,pins = <
+				MX6QDL_PAD_SD1_CMD__SD1_CMD                  0x17059
+				MX6QDL_PAD_SD1_CLK__SD1_CLK                  0x17059
+				MX6QDL_PAD_SD1_DAT0__SD1_DATA0               0x17059
+				MX6QDL_PAD_SD1_DAT1__SD1_DATA1               0x17059
+				MX6QDL_PAD_SD1_DAT2__SD1_DATA2               0x17059
+				MX6QDL_PAD_SD1_DAT3__SD1_DATA3               0x17059
+			>;
+		};
+
+		pinctrl_j8_port6_2: j8_port6grp2 {	/* PWM4 */
+			fsl,pins = <
+				MX6QDL_PAD_SD1_CMD__PWM4_OUT                 0x1b0b1
+			>;
+		};
+
+		pinctrl_j8_port6_3: j8_port6grp3 {	/* PWM3 */
+			fsl,pins = <
+				MX6QDL_PAD_SD1_DAT1__PWM3_OUT                0x1b0b1
+			>;
+		};
+
+		pinctrl_j8_port6_4: j8_port6grp4 {	/* PWM2 */
+			fsl,pins = <
+				MX6QDL_PAD_SD1_DAT2__PWM2_OUT                0x1b0b1
+			>;
+		};
+
+
+/*  ____________________________________________________________________________
+ * |__________________________________ PORT7 ___________________________________|
+*/
+		pinctrl_j8_port7_1: j8_port7grp1 {	/* I2C3 */
+			fsl,pins = <
+				MX6QDL_PAD_GPIO_16__I2C3_SDA                 0x4001b8b1
+				MX6QDL_PAD_GPIO_3__I2C3_SCL                  0x4001b8b1
+			>;
+		};
+
+
+/*  ____________________________________________________________________________
+ * |__________________________________ PORT8 ___________________________________|
+*/
+		pinctrl_j8_port8_1: j8_port8grp1 {	/* UART1 */
+			fsl,pins = <
+				MX6QDL_PAD_CSI0_DAT11__UART1_RX_DATA         0x1b0b1
+				MX6QDL_PAD_CSI0_DAT10__UART1_TX_DATA         0x1b0b1
+			>;
+		};
+
+
+/*  ____________________________________________________________________________
+ * |_________________________________ PORT9/10 _________________________________|
+*/
+		pinctrl_j8_port9_1: j8_port9grp1 {	/* UART5 FULL */
+			fsl,pins = <
+				MX6QDL_PAD_CSI0_DAT15__UART5_RX_DATA         0x1b0b1
+				MX6QDL_PAD_CSI0_DAT14__UART5_TX_DATA         0x1b0b1
+				MX6QDL_PAD_KEY_COL4__UART5_RTS_B             0x1b0b1
+				MX6QDL_PAD_KEY_ROW4__UART5_CTS_B             0x1b0b1
+			>;
+		};
+
+		pinctrl_j8_port9_2: j8_port9grp2 {	/* UART5 TX/RX */
+			fsl,pins = <
+				MX6QDL_PAD_CSI0_DAT15__UART5_RX_DATA         0x1b0b1
+				MX6QDL_PAD_CSI0_DAT14__UART5_TX_DATA         0x1b0b1
+			>;
+		};
+
+		pinctrl_j8_port9_3: j8_port9grp3 {	/* CAN2 */
+			fsl,pins = <
+				MX6QDL_PAD_KEY_COL4__FLEXCAN2_TX             0x80000000
+				MX6QDL_PAD_KEY_ROW4__FLEXCAN2_RX             0x80000000
+			>;
+		};
+
+	};
+
+};
+/*  __________________________________________________________________________
+ * |__________________________________________________________________________|
+ */
+
+
+/*  ____________________________________________________________________________
+ * |___________________________________ PORT2 __________________________________|
+*/
+&ecspi2 {
+	fsl,spi-num-chipselects = <1>;
+	cs-gpios                = <&gpio3 24  0>;
+	pinctrl-names           = "default";
+	pinctrl-0               = <&pinctrl_j8_port2_1>;
+	status                  = "disabled";
+
+	spidev@0x00{
+		compatible = "spidev";
+		spi-max-frequency = <1000000>;
+		reg = <0>;
+	};
+};
+
+
+
+/*  ____________________________________________________________________________
+ * |___________________________________ PORT3 __________________________________|
+*/
+&can1 {
+	pinctrl-names = "default";
+	pinctrl-0     = <&pinctrl_j8_port3_1>;
+	status        = "disabled";
+};
+
+
+
+/*  ____________________________________________________________________________
+ * |___________________________________ PORT4 __________________________________|
+*/
+&uart4 {
+	pinctrl-names = "default";
+	status        = "disabled";
+};
+
+
+
+/*  ____________________________________________________________________________
+ * |___________________________________ PORT5 __________________________________|
+*/
+&spdif {
+	pinctrl-names   = "default";
+	pinctrl-0       = <&pinctrl_j8_port5_1>;
+	status          = "disabled";
+};
+
+
+&i2c1 {
+	clock-frequency = <100000>;
+	pinctrl-names   = "default";
+	pinctrl-0       = <&pinctrl_j8_port5_2>;
+	status          = "disabled";
+};
+
+
+/*  ____________________________________________________________________________
+ * |___________________________________ PORT6 __________________________________|
+*/
+&usdhc1 {
+	pinctrl-names = "default";
+	pinctrl-0     = <&pinctrl_j8_port6_1>;
+	bus-width     = <4>;
+	no-1-8-v;
+	keep-power-in-suspend;
+	enable-sdio-wakeup;
+	status = "disabled";
+};
+
+
+&pwm4 {
+	pinctrl-names = "default";
+	pinctrl-0     = <&pinctrl_j8_port6_2>;
+	status        = "disabled";
+};
+
+
+&pwm3 {
+	pinctrl-names = "default";
+	pinctrl-0     = <&pinctrl_j8_port6_3>;
+	status        = "disabled";
+};
+
+
+&pwm2 {
+	pinctrl-names = "default";
+	pinctrl-0     = <&pinctrl_j8_port6_4>;
+	status        = "disabled";
+};
+
+
+
+/*  ____________________________________________________________________________
+ * |___________________________________ PORT7 __________________________________|
+*/
+&i2c3 {
+	clock-frequency = <100000>;
+	pinctrl-names   = "default";
+	pinctrl-0       = <&pinctrl_j8_port7_1>;
+	status          = "disabled";
+};
+
+
+
+/*  ____________________________________________________________________________
+ * |___________________________________ PORT8 __________________________________|
+*/
+&uart1 {
+	pinctrl-names = "default";
+	pinctrl-0     = <&pinctrl_j8_port8_1>;
+	status        = "disabled";
+};
+
+
+
+/*  ____________________________________________________________________________
+ * |_________________________________ PORT9/10 _________________________________|
+*/
+&can2 {
+	pinctrl-names = "default";
+	pinctrl-0     = <&pinctrl_j8_port9_3>;
+	status        = "disabled";
+};
+
