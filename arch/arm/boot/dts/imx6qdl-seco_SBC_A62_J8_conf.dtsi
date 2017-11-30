@@ -12,31 +12,4 @@
 
 
 
-&uart4 {
-	pinctrl-0     = <&pinctrl_j8_port4_1>;
-	fsl,uart-has-rtscts;
-	status        = "okay";
-};
-
-
-
-
-&usdhc1 {
-	status = "okay";
-};
-
-
-
-
-&uart1 {
-	status = "okay";
-};
-
-
-
-
-&uart5 {
-	pinctrl-0     = <&pinctrl_j8_port5_2>;
-	status        = "okay";
-};
 
