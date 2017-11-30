@@ -64,6 +64,7 @@ static int __init early_audio_codec (char *options) {
 }
 early_param("audio_codec", early_audio_codec);
 
+
 /*  For 928, selection between UART4 and CAN1 interface */
 /*  For A75, selection between UART1 and CAN1 interface */
 static char *serial_options __read_mostly;
@@ -252,6 +253,7 @@ fail_entry_codec:
 fail_device_def:
 	of_node_put (np);
 	return err;
+
 }
 
 /* For imx6q sabrelite board: set KSZ9021RN RGMII pad skew */
@@ -443,10 +445,10 @@ static void __init imx6q_1588_init(void)
 	if (!IS_ERR(gpr)) {
 
 		if ( clk_out )
-		regmap_update_bits(gpr, IOMUXC_GPR1,
-				IMX6Q_GPR1_ENET_CLK_SEL_MASK,
-				IMX6Q_GPR1_ENET_CLK_SEL_ANATOP);
-	else
+			regmap_update_bits(gpr, IOMUXC_GPR1,
+					IMX6Q_GPR1_ENET_CLK_SEL_MASK, 
+					IMX6Q_GPR1_ENET_CLK_SEL_ANATOP);
+		else
 			regmap_update_bits(gpr, IOMUXC_GPR1,
 					IMX6Q_GPR1_ENET_CLK_SEL_MASK, 
 					~IMX6Q_GPR1_ENET_CLK_SEL_ANATOP);

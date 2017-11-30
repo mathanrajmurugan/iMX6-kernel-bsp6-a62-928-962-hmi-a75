@@ -570,9 +570,16 @@ static void ldb_disable(struct mxc_dispdrv_handle *mddh,
 enum {
 	LVDS_BIT_MAP_SPWG,
 	LVDS_BIT_MAP_JEIDA,
+	LVDS_BIT_MAP_NONE,
 };
 
-static int datamap_mode = LVDS_BIT_MAP_JEIDA;
+static const char *ldb_bit_mappings[] = {
+	[LVDS_BIT_MAP_SPWG]  = "spwg",
+	[LVDS_BIT_MAP_JEIDA] = "jeida",
+	[LVDS_BIT_MAP_NONE]  = "none",
+};
+
+static int datamap_mode = LVDS_BIT_MAP_NONE;
 
 static int __init datamap_mode_setup (char *options) {
 
@@ -581,11 +588,27 @@ static int __init datamap_mode_setup (char *options) {
         else if (!strcmp(options, "spwg"))
 		datamap_mode = LVDS_BIT_MAP_SPWG;
 	else
-		datamap_mode = LVDS_BIT_MAP_JEIDA;
+		datamap_mode = LVDS_BIT_MAP_NONE;
 
         return 1;
 }
 __setup("datamap=", datamap_mode_setup);
+
+static int of_get_data_mapping(struct device_node *np)
+{
+	const char *bm;
+	int ret, i;
+
+	ret = of_property_read_string(np, "fsl,data-mapping", &bm);
+	if (ret < 0)
+		return ret;
+
+	for (i = 0; i < ARRAY_SIZE(ldb_bit_mappings); i++)
+		if (!strcasecmp(bm, ldb_bit_mappings[i]))
+			return i;
+
+	return -EINVAL;
+}
 
 static const char *ldb_crtc_mappings[] = {
 	[CRTC_IPU_DI0] = "ipu-di0",
@@ -696,9 +719,9 @@ static int ldb_init(struct mxc_dispdrv_handle *mddh,
 		data_width = bits_per_pixel(setting->if_fmt);
 	}
 
-		mapping = datamap_mode;
+	mapping = datamap_mode;
 
-		switch (mapping) {
+	switch (mapping) {
 		case LVDS_BIT_MAP_SPWG:
 			if (data_width == 24) {
 				if (i == 0 || ldb->spl_mode || ldb->dual_mode)
@@ -722,7 +745,7 @@ static int ldb_init(struct mxc_dispdrv_handle *mddh,
 		default:
 			dev_err(dev, "data mapping not specified or invalid\n");
 			return -EINVAL;
-		}
+	}
 
 	crtc = of_get_crtc_mapping(chan->np_timings);
 	if (is_valid_crtc(ldb, crtc, chan->chno)) {
@@ -921,6 +944,13 @@ static int ldb_probe(struct platform_device *pdev)
 			dev_err(dev, "failed to get clk %s\n", clkname);
 			return PTR_ERR(ldb->div_sel_clk[i]);
 		}
+
+		if (datamap_mode == LVDS_BIT_MAP_NONE)
+			datamap_mode = of_get_data_mapping(child);
+
+		if (datamap_mode == LVDS_BIT_MAP_NONE)
+                	datamap_mode = LVDS_BIT_MAP_JEIDA;
+
 	}
 
 	if (child_count == 0) {
