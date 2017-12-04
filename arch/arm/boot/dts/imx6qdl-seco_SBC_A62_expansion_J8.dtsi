@@ -27,12 +27,26 @@
 /*  ____________________________________________________________________________
  * |__________________________________ PORT1 ___________________________________|
 */
-		/*  NONE */
+		pinctrl_j8_port1_gpio: j8_port1grp1 {
+			fsl,pins = <
+				MX6QDL_PAD_GPIO_9__GPIO1_IO09                0x1f071
+			>;
+		};
 
 /*  ____________________________________________________________________________
  * |__________________________________ PORT2 ___________________________________|
 */
-		pinctrl_j8_port2_1: j8_port2grp1 {	/* SPI2 */
+
+		pinctrl_j8_port2_gpio: j8_port2grp1 {
+			fsl,pins = <
+				MX6QDL_PAD_EIM_CS0__GPIO2_IO23               0x1f071
+				MX6QDL_PAD_EIM_CS1__GPIO2_IO24               0x1f071
+				MX6QDL_PAD_EIM_OE__GPIO2_IO25                0x1f071
+				MX6QDL_PAD_EIM_D24__GPIO3_IO24               0x1f071
+			>;
+		};
+
+		pinctrl_j8_port2_1: j8_port2grp2 {	/* SPI2 */
 			fsl,pins = <
 				MX6QDL_PAD_EIM_CS0__ECSPI2_SCLK              0x100b1
 				MX6QDL_PAD_EIM_CS1__ECSPI2_MOSI              0x100b1
@@ -46,7 +60,14 @@
 /*  ____________________________________________________________________________
  * |__________________________________ PORT3 ___________________________________|
 */
-		pinctrl_j8_port3_1: j8_port3grp1 {	/* CAN1 */
+		pinctrl_j8_port3_gpio: j8_port3grp1 {
+			fsl,pins = <
+				MX6QDL_PAD_GPIO_7__GPIO1_IO07                0x1f071
+				MX6QDL_PAD_GPIO_8__GPIO1_IO08                0x1f071
+			>;
+		};
+
+		pinctrl_j8_port3_1: j8_port3grp2 {	/* CAN1 */
 			fsl,pins = <
 				MX6QDL_PAD_GPIO_7__FLEXCAN1_TX               0x80000000
 				MX6QDL_PAD_GPIO_8__FLEXCAN1_RX               0x80000000
@@ -77,14 +98,36 @@
 /*  ____________________________________________________________________________
  * |__________________________________ PORT5 ___________________________________|
 */
-		pinctrl_j8_port5_1: j8_port5grp1 {	/* SPDIF */
+		pinctrl_j8_port5_gpio3: j8_port5grp1 {
+			fsl,pins = <
+				MX6QDL_PAD_EIM_D28__GPIO3_IO28               0x1f071
+				MX6QDL_PAD_EIM_D21__GPIO3_IO21               0x1f071
+				MX6QDL_PAD_GPIO_19__GPIO4_IO05               0x1f071
+			>;
+		};
+
+		pinctrl_j8_port5_gpio1A: j8_port5grp2 {
+			fsl,pins = <
+				MX6QDL_PAD_EIM_D21__GPIO3_IO21               0x1f071
+				MX6QDL_PAD_GPIO_19__GPIO4_IO05               0x1f071
+			>;
+		};
+
+		pinctrl_j8_port5_gpio1B: j8_port5grp3 {
+			fsl,pins = <
+				MX6QDL_PAD_EIM_D28__GPIO3_IO28               0x1f071
+				MX6QDL_PAD_EIM_D21__GPIO3_IO21               0x1f071
+			>;
+		};
+
+		pinctrl_j8_port5_1: j8_port5grp4 {	/* SPDIF */
 			fsl,pins = <
 				MX6QDL_PAD_EIM_D21__SPDIF_IN                 0x1b0b0
 				MX6QDL_PAD_GPIO_19__SPDIF_OUT                0x1b0b0
 			>;
 		};
 
-		pinctrl_j8_port5_2: j8_port5grp2 {	/* I2C1 */
+		pinctrl_j8_port5_2: j8_port5grp5 {	/* I2C1 */
 			fsl,pins = <
 				MX6QDL_PAD_EIM_D28__I2C1_SDA                 0x4001b8b1
 				MX6QDL_PAD_EIM_D21__I2C1_SCL                 0x4001b8b1
@@ -95,7 +138,83 @@
 /*  ____________________________________________________________________________
  * |__________________________________ PORT6 ___________________________________|
 */
-		pinctrl_j8_port6_1: j8_port6grp1 {	/* SDIO1 4BIT */
+		pinctrl_j8_port6_gpio6: j8_port6grp1 {
+			fsl,pins = <
+				MX6QDL_PAD_SD1_CLK__GPIO1_IO20               0x1b0b1
+				MX6QDL_PAD_SD1_DAT0__GPIO1_IO16              0x1b0b1
+				MX6QDL_PAD_SD1_DAT3__GPIO1_IO21              0x1b0b1
+				MX6QDL_PAD_SD1_CMD__GPIO1_IO18               0x1f071
+				MX6QDL_PAD_SD1_DAT1__GPIO1_IO17              0x1f071
+				MX6QDL_PAD_SD1_DAT2__GPIO1_IO19              0x1f071
+			>;
+		};
+
+		pinctrl_j8_port6_gpio5A: j8_port6grp2 {
+			fsl,pins = <
+				MX6QDL_PAD_SD1_CLK__GPIO1_IO20               0x1b0b1
+				MX6QDL_PAD_SD1_DAT0__GPIO1_IO16              0x1b0b1
+				MX6QDL_PAD_SD1_DAT3__GPIO1_IO21              0x1b0b1
+				MX6QDL_PAD_SD1_CMD__GPIO1_IO18               0x1f071
+				MX6QDL_PAD_SD1_DAT1__GPIO1_IO17              0x1f0
+			>;
+		};
+
+		pinctrl_j8_port6_gpio5B: j8_port6grp3 {
+			fsl,pins = <
+				MX6QDL_PAD_SD1_CLK__GPIO1_IO20               0x1b0b1
+				MX6QDL_PAD_SD1_DAT0__GPIO1_IO16              0x1b0b1
+				MX6QDL_PAD_SD1_DAT3__GPIO1_IO21              0x1b0b1
+				MX6QDL_PAD_SD1_CMD__GPIO1_IO18               0x1f071
+				MX6QDL_PAD_SD1_DAT2__GPIO1_IO19              0x1f071
+			>;
+		};
+
+		pinctrl_j8_port6_gpio5C: j8_port6grp4 {
+			fsl,pins = <
+				MX6QDL_PAD_SD1_CLK__GPIO1_IO20               0x1b0b1
+				MX6QDL_PAD_SD1_DAT0__GPIO1_IO16              0x1b0b1
+				MX6QDL_PAD_SD1_DAT3__GPIO1_IO21              0x1b0b1
+				MX6QDL_PAD_SD1_DAT1__GPIO1_IO17              0x1f071
+				MX6QDL_PAD_SD1_DAT2__GPIO1_IO19              0x1f071
+			>;
+		};
+
+		pinctrl_j8_port6_gpio4A: j8_port6grp5 {
+			fsl,pins = <
+				MX6QDL_PAD_SD1_CLK__GPIO1_IO20               0x1b0b1
+				MX6QDL_PAD_SD1_DAT0__GPIO1_IO16              0x1b0b1
+				MX6QDL_PAD_SD1_DAT3__GPIO1_IO21              0x1b0b1
+				MX6QDL_PAD_SD1_CMD__GPIO1_IO18               0x1f071
+			>;
+		};
+
+		pinctrl_j8_port6_gpio4B: j8_port6grp6 {
+			fsl,pins = <
+				MX6QDL_PAD_SD1_CLK__GPIO1_IO20               0x1b0b1
+				MX6QDL_PAD_SD1_DAT0__GPIO1_IO16              0x1b0b1
+				MX6QDL_PAD_SD1_DAT3__GPIO1_IO21              0x1b0b1
+				MX6QDL_PAD_SD1_DAT1__GPIO1_IO17              0x1f071
+			>;
+		};
+
+		pinctrl_j8_port6_gpio4C: j8_port6grp7 {
+			fsl,pins = <
+				MX6QDL_PAD_SD1_CLK__GPIO1_IO20               0x1b0b1
+				MX6QDL_PAD_SD1_DAT0__GPIO1_IO16              0x1b0b1
+				MX6QDL_PAD_SD1_DAT3__GPIO1_IO21              0x1b0b1
+				MX6QDL_PAD_SD1_DAT2__GPIO1_IO19              0x1f071
+			>;
+		};
+
+		pinctrl_j8_port6_gpio3: j8_port6grp8 {
+			fsl,pins = <
+				MX6QDL_PAD_SD1_CLK__GPIO1_IO20               0x1b0b1
+				MX6QDL_PAD_SD1_DAT0__GPIO1_IO16              0x1b0b1
+				MX6QDL_PAD_SD1_DAT3__GPIO1_IO21              0x1b0b1
+			>;
+		};
+
+		pinctrl_j8_port6_1: j8_port6grp9 {	/* SDIO1 4BIT */
 			fsl,pins = <
 				MX6QDL_PAD_SD1_CMD__SD1_CMD                  0x17059
 				MX6QDL_PAD_SD1_CLK__SD1_CLK                  0x17059
@@ -106,19 +225,19 @@
 			>;
 		};
 
-		pinctrl_j8_port6_2: j8_port6grp2 {	/* PWM4 */
+		pinctrl_j8_port6_2: j8_port6grp10 {	/* PWM4 */
 			fsl,pins = <
 				MX6QDL_PAD_SD1_CMD__PWM4_OUT                 0x1b0b1
 			>;
 		};
 
-		pinctrl_j8_port6_3: j8_port6grp3 {	/* PWM3 */
+		pinctrl_j8_port6_3: j8_port6grp11 {	/* PWM3 */
 			fsl,pins = <
 				MX6QDL_PAD_SD1_DAT1__PWM3_OUT                0x1b0b1
 			>;
 		};
 
-		pinctrl_j8_port6_4: j8_port6grp4 {	/* PWM2 */
+		pinctrl_j8_port6_4: j8_port6grp12 {	/* PWM2 */
 			fsl,pins = <
 				MX6QDL_PAD_SD1_DAT2__PWM2_OUT                0x1b0b1
 			>;
@@ -128,18 +247,24 @@
 /*  ____________________________________________________________________________
  * |__________________________________ PORT7 ___________________________________|
 */
-		pinctrl_j8_port7_1: j8_port7grp1 {	/* I2C3 */
+		pinctrl_j8_port7_gpio: j8_port7grp1 {
 			fsl,pins = <
-				MX6QDL_PAD_GPIO_16__I2C3_SDA                 0x4001b8b1
-				MX6QDL_PAD_GPIO_3__I2C3_SCL                  0x4001b8b1
+				MX6QDL_PAD_GPIO_16__GPIO7_IO11               0x1f071
+				MX6QDL_PAD_GPIO_3__GPIO1_IO03                0x1f071
 			>;
 		};
-
 
 /*  ____________________________________________________________________________
  * |__________________________________ PORT8 ___________________________________|
 */
-		pinctrl_j8_port8_1: j8_port8grp1 {	/* UART1 */
+		pinctrl_j8_port8_gpio: j8_port8grp1 {
+			fsl,pins = <
+				MX6QDL_PAD_CSI0_DAT11__GPIO5_IO29            0x1f071
+				MX6QDL_PAD_CSI0_DAT10__GPIO5_IO28            0x1f071
+			>;
+		};
+
+		pinctrl_j8_port8_1: j8_port8grp2 {	/* UART1 */
 			fsl,pins = <
 				MX6QDL_PAD_CSI0_DAT11__UART1_RX_DATA         0x1b0b1
 				MX6QDL_PAD_CSI0_DAT10__UART1_TX_DATA         0x1b0b1
@@ -150,7 +275,14 @@
 /*  ____________________________________________________________________________
  * |_________________________________ PORT9/10 _________________________________|
 */
-		pinctrl_j8_port9_1: j8_port9grp1 {	/* UART5 FULL */
+		pinctrl_j8_port9_gpio: j8_port9grp1 {
+			fsl,pins = <
+				MX6QDL_PAD_CSI0_DAT15__GPIO6_IO01            0x1f071
+				MX6QDL_PAD_CSI0_DAT14__GPIO6_IO00            0x1f071
+			>;
+		};
+
+		pinctrl_j8_port9_1: j8_port9grp2 {	/* UART5 FULL */
 			fsl,pins = <
 				MX6QDL_PAD_CSI0_DAT15__UART5_RX_DATA         0x1b0b1
 				MX6QDL_PAD_CSI0_DAT14__UART5_TX_DATA         0x1b0b1
@@ -159,14 +291,14 @@
 			>;
 		};
 
-		pinctrl_j8_port9_2: j8_port9grp2 {	/* UART5 TX/RX */
+		pinctrl_j8_port9_2: j8_port9grp3 {	/* UART5 TX/RX */
 			fsl,pins = <
 				MX6QDL_PAD_CSI0_DAT15__UART5_RX_DATA         0x1b0b1
 				MX6QDL_PAD_CSI0_DAT14__UART5_TX_DATA         0x1b0b1
 			>;
 		};
 
-		pinctrl_j8_port9_3: j8_port9grp3 {	/* CAN2 */
+		pinctrl_j8_port9_3: j8_port9grp4 {	/* CAN2 */
 			fsl,pins = <
 				MX6QDL_PAD_KEY_COL4__FLEXCAN2_TX             0x80000000
 				MX6QDL_PAD_KEY_ROW4__FLEXCAN2_RX             0x80000000
@@ -278,13 +410,6 @@
 /*  ____________________________________________________________________________
  * |___________________________________ PORT7 __________________________________|
 */
-&i2c3 {
-	clock-frequency = <100000>;
-	pinctrl-names   = "default";
-	pinctrl-0       = <&pinctrl_j8_port7_1>;
-	status          = "disabled";
-};
-
 
 
 /*  ____________________________________________________________________________

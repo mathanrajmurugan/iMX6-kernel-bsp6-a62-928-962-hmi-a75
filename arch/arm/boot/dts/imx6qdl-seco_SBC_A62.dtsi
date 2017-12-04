@@ -272,53 +272,6 @@
 				/*  LVDS  */
 				MX6QDL_PAD_GPIO_4__GPIO1_IO04                0x1f071
 				MX6QDL_PAD_GPIO_2__GPIO1_IO02                0x1f071
-
-				/*  J8 Expansion Connector - Port 1  */
-				MX6QDL_PAD_GPIO_9__GPIO1_IO09                0x1f071
-
-				/*  J8 Expansion Connector - Port 2  */
-				MX6QDL_PAD_EIM_CS0__GPIO2_IO23               0x1f071
-				MX6QDL_PAD_EIM_CS1__GPIO2_IO24               0x1f071
-				MX6QDL_PAD_EIM_OE__GPIO2_IO25                0x1f071
-				MX6QDL_PAD_EIM_D24__GPIO3_IO24               0x1f071
-
-				/*  J8 Expansion Connector - Port 3  */
-				MX6QDL_PAD_GPIO_7__GPIO1_IO07                0x1f071
-				MX6QDL_PAD_GPIO_8__GPIO1_IO08                0x1f071
-
-				/*  J8 Expansion Connector - Port 4  */
-				MX6QDL_PAD_CSI0_DAT17__GPIO6_IO03            0x1f071
-				MX6QDL_PAD_CSI0_DAT16__GPIO6_IO02            0x1f071
-				MX6QDL_PAD_CSI0_DAT12__GPIO5_IO30            0x1f071
-				MX6QDL_PAD_CSI0_DAT13__GPIO5_IO31            0x1f071
-
-				/*  J8 Expansion Connector - Port 5  */
-				MX6QDL_PAD_EIM_D28__GPIO3_IO28               0x1f071
-				MX6QDL_PAD_EIM_D21__GPIO3_IO21               0x1f071
-				MX6QDL_PAD_GPIO_19__GPIO4_IO05               0x1f071
-
-				/*  J8 Expansion Connector - Port 6  */
-				MX6QDL_PAD_SD1_CLK__GPIO1_IO20               0x1b0b1
-				MX6QDL_PAD_SD1_DAT0__GPIO1_IO16              0x1b0b1
-				MX6QDL_PAD_SD1_DAT3__GPIO1_IO21              0x1b0b1
-				MX6QDL_PAD_SD1_CMD__GPIO1_IO18               0x1f071
-				MX6QDL_PAD_SD1_DAT1__GPIO1_IO17              0x1f071
-				MX6QDL_PAD_SD1_DAT2__GPIO1_IO19              0x1f071
-
-				/*  J8 Expansion Connector - Port 7  */
-				MX6QDL_PAD_GPIO_16__GPIO7_IO11               0x1f071
-				MX6QDL_PAD_GPIO_3__GPIO1_IO03                0x1f071
-
-				/*  J8 Expansion Connector - Port 8  */
-				MX6QDL_PAD_CSI0_DAT11__GPIO5_IO29            0x1f071
-				MX6QDL_PAD_CSI0_DAT10__GPIO5_IO28            0x1f071
-
-				/*  J8 Expansion Connector - Port 9/10  */
-				MX6QDL_PAD_CSI0_DAT15__GPIO6_IO01            0x1b0b1
-				MX6QDL_PAD_CSI0_DAT14__GPIO6_IO00            0x1b0b1
-				MX6QDL_PAD_KEY_COL4__GPIO4_IO14              0x1b0b1
-				MX6QDL_PAD_KEY_ROW4__GPIO4_IO15              0x1b0b1
-
 			>;
 		};
 

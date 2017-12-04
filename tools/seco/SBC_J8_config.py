@@ -274,6 +274,7 @@ class TestPanel(wx.Panel):
         page = self.page1
         
         dts=""
+        gpios=""
         while page.next != None:
             page = page.GetNext()
             
@@ -281,7 +282,10 @@ class TestPanel(wx.Panel):
             for tag in lst:
                 node = self.__DTSconf.getDTSnodeFromTag (tag)
                 if ( node != "" ):
-                    dts = "%s\n\n%s\n" % (dts, node)
+                    if ( "GPIO_PORT:" in node):
+                        gpios = "%s%s" % (gpios, node.replace("GPIO_PORT:", ""))
+                    else:
+                        dts = "%s\n\n%s\n" % (dts, node)
             
             
         file = open("./dts_header.txt", "r") 
@@ -289,6 +293,10 @@ class TestPanel(wx.Panel):
         file.close
         dts = "%s\n%s" % (header, dts)
         
+	gpios = "&iomuxc {\n\npinctrl-0 = <&pinctrl_hog\n%s\n>;\n};\n\n" % gpios
+
+        dts = "%s\n\n\n%s" % (dts, gpios)
+
         self.dts_data = dts       
                     
         #print "OnWizFinished\n"
