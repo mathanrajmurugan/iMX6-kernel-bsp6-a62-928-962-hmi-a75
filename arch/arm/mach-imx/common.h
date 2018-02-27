@@ -75,6 +75,7 @@ void imx_gpc_set_arm_power_down_timing(u32 sw2iso, u32 sw);
 unsigned int imx_gpc_is_mf_mix_off(void);
 void imx6sx_set_m4_highfreq(bool high_freq);
 void imx_mu_enable_m4_irqs_in_gic(bool enable);
+void mxc_arch_reset_init_dt(void);
 #ifdef CONFIG_HAVE_IMX_GPC
 void imx_gpc_add_m4_wake_up_irq(u32 irq, bool enable);
 unsigned int imx_gpc_is_m4_sleeping(void);
