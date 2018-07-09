@@ -23,7 +23,7 @@
 #include <linux/device.h>
 #include "apx_wdog-trigger.h"
 #include <linux/apx_wdt_io.h>
-
+#include <linux/timer.h>
 
 #include <linux/init.h>
 #include <linux/smp.h>
@@ -53,17 +53,18 @@ typedef struct wdog_data {
 
 static struct wdog_trigger_data {
 
-	void           (*refresh_wdt)(void);
-	unsigned long  wdt_refresh_time;
-	unsigned long  wdt_current_refresh_time;
-	int            wdt_refresh;
-	int            wdt_trigger_mode;
-	int            wdt_enable;
-	wdog_data_t    pin_trg;
-	wdog_data_t    pin_en;
-	int            is_initialized;
-	struct mutex   ops_lock;
-	struct mutex   ioctl_lock;
+	void           		(*refresh_wdt)(void);
+	volatile unsigned long	wdt_refresh_time;
+	volatile unsigned long	wdt_current_refresh_time;
+	volatile int            wdt_refresh;
+	int            			wdt_trigger_mode;
+	int            			wdt_enable;
+	wdog_data_t    			pin_trg;
+	wdog_data_t    			pin_en;
+	int            			is_initialized;
+	struct timer_list 		wdt_timer;
+	struct mutex			ops_lock;
+	struct mutex   			ioctl_lock;
 } wdt;
 
 
@@ -71,18 +72,15 @@ static struct wdog_trigger_data {
 
 #define WDT_PAD_CTRL_GPIO(x)    writel_relaxed(0x06028, (x))
 
-#define WDT_DIR_OUT_GPIO(x,n)   writel_relaxed(readl_relaxed((x) + 0x4) | ( 1 << (n)), (x))
+#define WDT_DIR_OUT_GPIO(x,n)   writel_relaxed(readl_relaxed((x) + 0x4) | ( 1 << (n)), (x) + 0x4)
 
 #define WDT_SET_H_GPIO(x,n)     writel_relaxed(readl_relaxed((x)) | (1 << (n)) , (x))
 
 #define WDT_SET_L_GPIO(x,n)     writel_relaxed(readl_relaxed((x)) & ~(1 << (n)) , (x))
 
-static void wdog_trigger_work_handler(struct work_struct *w);
 static void enable_triggering (void);
 static void disable_triggering (void);
 
-static struct workqueue_struct *wq = 0;
-static DECLARE_DELAYED_WORK(wdog_trigger_work, wdog_trigger_work_handler);
 
 
 
@@ -142,8 +140,14 @@ static void apx_wdog_configure_pins(char dir) {
 
 }
 
-
+static unsigned int last_trigger_time = 0;
 void imx6_wdog_refresh (void) {
+
+    if (jiffies_to_msecs(jiffies) - last_trigger_time > 100)
+    {
+        pr_warn("apx_wdog: mod_timer late wdog refresh  = %imS \n", jiffies_to_msecs(jiffies) - last_trigger_time);
+    }
+    last_trigger_time = jiffies_to_msecs(jiffies);
 
 	WDT_SET_H_GPIO(wdt.pin_trg.base, wdt.pin_trg.num);
 
@@ -159,24 +163,35 @@ void imx6_wdog_refresh (void) {
    |                               WORK FUNCTIONS                             |
    |__________________________________________________________________________|
    */
-static void wdog_trigger_work_handler (struct work_struct *w) {
+static void wdog_trigger_work_handler (unsigned long data) {
 
 
 	mutex_lock (&wdt.ops_lock);
-	if ( (wdt.wdt_enable == APX_WDOG_STATUS_EN) &&
-		((!time_after (jiffies, wdt.wdt_current_refresh_time + wdt.wdt_refresh_time) &&
-		 wdt.wdt_trigger_mode == APX_WDOG_TRIG_MOD_MAN) ||
-		 wdt.wdt_trigger_mode == APX_WDOG_TRIG_MOD_AUTO) ) {
+	if ( likely(wdt.wdt_enable == APX_WDOG_STATUS_EN) ) { 
 
-		if (wdt.wdt_trigger_mode == APX_WDOG_TRIG_MOD_AUTO)
-			wdt.wdt_current_refresh_time = jiffies;
+		if (wdt.wdt_trigger_mode == APX_WDOG_TRIG_MOD_AUTO) { 
 
-		mutex_unlock (&wdt.ops_lock);
-		if ( wdt.refresh_wdt )
-			wdt.refresh_wdt ();
+			if ( likely(wdt.refresh_wdt) )
+				wdt.refresh_wdt ();
 
-		queue_delayed_work(wq, &wdog_trigger_work, WDOG_TRIGGER_REFRESH);
-	} else
+			mod_timer(&wdt.wdt_timer, jiffies + WDOG_TRIGGER_REFRESH);
+			mutex_unlock (&wdt.ops_lock);
+		}
+
+		if (wdt.wdt_trigger_mode == APX_WDOG_TRIG_MOD_MAN) {
+
+			if(likely(((long)wdt.wdt_refresh_time - (long)(jiffies - wdt.wdt_current_refresh_time)) > 0 )) { 
+						
+				if (likely(wdt.refresh_wdt) ) 
+					wdt.refresh_wdt ();
+
+				mod_timer(&wdt.wdt_timer, jiffies + WDOG_TRIGGER_REFRESH);
+				mutex_unlock (&wdt.ops_lock);
+			} else
+				pr_warn("apx_wdog: refresh time elapsed jiffies=%lu > %lu\n",jiffies,(wdt.wdt_current_refresh_time + wdt.wdt_refresh_time));
+		}
+	} 
+	else
 		mutex_unlock (&wdt.ops_lock);
 
 }
@@ -195,10 +210,10 @@ static void enable_triggering () {
 	pr_info("apx_wdog: enabled wdog - %u s between refresh\n", jiffies_to_msecs(WDOG_TIME) / 1000 );
 
 	wdt.refresh_wdt();
-	if ( !wq )
-		wq = create_singlethread_workqueue ("wdog_trigger");
-	if ( wq )
-		queue_delayed_work (wq, &wdog_trigger_work, WDOG_TRIGGER_REFRESH);
+	
+	setup_timer(&wdt.wdt_timer, wdog_trigger_work_handler, 0);
+	
+	mod_timer(&wdt.wdt_timer, jiffies + WDOG_TRIGGER_REFRESH);
 
 }
 
@@ -208,8 +223,7 @@ static void disable_triggering () {
 	wdt.wdt_enable = APX_WDOG_STATUS_DIS;
 	mutex_unlock (&wdt.ops_lock);
 
-	if(wq)
-		flush_workqueue (wq);
+	del_timer(&wdt.wdt_timer);
 	PIN_CONF_DIS;
 }
 
@@ -305,12 +319,12 @@ static ssize_t wdog_trigger_refresh_time_write (struct class *cls, struct class_
 
 static ssize_t wdog_trigger_residual_time_read (struct class *cls, struct class_attribute *attr, char *buf) {
 
-	unsigned long  residual;
+	long  residual;
 	if ( wdt.wdt_trigger_mode == APX_WDOG_TRIG_MOD_MAN )
-		residual = wdt.wdt_refresh_time - (jiffies - wdt.wdt_current_refresh_time);
+		residual = (long)wdt.wdt_refresh_time - (long)(jiffies - wdt.wdt_current_refresh_time);
 	else
 		residual = wdt.wdt_refresh_time;
-	return sprintf(buf, "%u msec\n", jiffies_to_msecs(residual));
+	return sprintf(buf, "%d msec\n", jiffies_to_msecs(residual));
 }
 
 
@@ -629,8 +643,8 @@ err_dev_init:
 
 
 static void __exit wdog_trigger_exit (void) {
-	if (wq)
-		destroy_workqueue(wq);
+
+	del_timer(&wdt.wdt_timer);
 
 	pr_info("wdog_trigger exit\n");
 }
