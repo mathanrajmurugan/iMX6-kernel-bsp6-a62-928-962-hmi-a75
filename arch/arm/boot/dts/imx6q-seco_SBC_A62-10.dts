@@ -1,3 +1,5 @@
+
+
 /*
  * Copyright 2012 Freescale Semiconductor, Inc.
  * Copyright 2011 Linaro Ltd.
@@ -12,24 +14,30 @@
 
 /dts-v1/;
 
-#include "imx6dl.dtsi"
+#include "imx6q.dtsi"
 #include "imx6qdl-seco_SBC_A62.dtsi"
 #include "imx6qdl-seco_lvds_display.dtsi"
 #include "imx6qdl-seco_SBC_A62_expansion_J8.dtsi"
 #include "imx6qdl-seco_SBC_A62_J8_conf.dtsi"
 
 / {
-	model = "SECO i.MX6 DualLite/Solo SBC (A62) Board";
-	compatible = "fsl,imx6dl-SBC_A62", "fsl,imx6dl";
+	model = "SECO i.MX6 Quad SBC (A62) Board";
+	compatible = "fsl,imx6q-SBC_A62", "fsl,imx6q";
 };
 
+//&battery {
+//	offset-charger = <1900>;
+//	offset-discharger = <1694>;
+//	offset-usb-charger = <1685>;
+//};
+//
 &ldb {
 	lvds-channel@0 {
-		crtc = "ipu1-di0";
+		crtc = "ipu2-di0";
 	};
 
 	lvds-channel@1 {
-		crtc = "ipu1-di1";
+		crtc = "ipu2-di1";
 	};
 };
 
@@ -41,8 +49,20 @@
 	status = "okay";
 };
 
+//&mxcfb3 {
+//	status = "okay";
+//};
+//
+//&mxcfb4 {
+//	status = "okay";
+//};
+
+&sata {
+	status = "okay";
+};
+
 &i2c3 {
-	st1232-ts@55 {
+	gt928@5d {
 		status = "okay";
 	};
 };

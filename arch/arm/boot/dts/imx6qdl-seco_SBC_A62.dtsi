@@ -631,16 +631,17 @@
 		mclk_source = <0>;
 	};
 
-//	st1232-ts@55 {
-//		compatible       = "sitronix,st1232";
-//		reg              = <0x55>;
-//
-//		pinctrl-names    = "default";
-//		pinctrl-0        = <&pinctrl_st1232>;
-//		interrupt-parent = <&gpio1>;
-//		interrupts       = <13 IRQ_TYPE_LEVEL_LOW>;
-//		gpios            = <&gpio1 15 GPIO_ACTIVE_LOW>;
-//	};
+	st1232-ts@55 {
+		compatible       = "sitronix,st1232";
+		reg              = <0x55>;
+
+		pinctrl-names    = "default";
+		pinctrl-0        = <&pinctrl_st1232>;
+		interrupt-parent = <&gpio1>;
+		interrupts       = <13 IRQ_TYPE_LEVEL_LOW>;
+		gpios            = <&gpio1 15 GPIO_ACTIVE_LOW>;
+		status		 = "disabled";
+	};
 
 	gt928@5d {
 		compatible       = "goodix,gt928";
@@ -659,6 +660,7 @@
 
 		ts-max-finger    = <1>;
 		sensor-id        = <0>;
+		status		 = "disabled";
 
 	};
 

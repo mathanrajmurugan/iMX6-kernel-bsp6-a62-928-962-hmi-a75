@@ -58,3 +58,9 @@
 &sata {
 	status = "okay";
 };
+
+&i2c3 {
+	st1232-ts@55 {
+		status = "okay";
+	};
+};

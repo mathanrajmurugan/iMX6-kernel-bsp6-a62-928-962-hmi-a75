@@ -291,14 +291,14 @@
 			>;
 		};
 
-		pinctrl_j8_port9_2: j8_port9grp3 {	/* UART5 TX/RX */
+		pinctrl_j8_port9_3: j8_port9grp3 {	/* UART5 TX/RX */
 			fsl,pins = <
 				MX6QDL_PAD_CSI0_DAT15__UART5_RX_DATA         0x1b0b1
 				MX6QDL_PAD_CSI0_DAT14__UART5_TX_DATA         0x1b0b1
 			>;
 		};
 
-		pinctrl_j8_port9_3: j8_port9grp4 {	/* CAN2 */
+		pinctrl_j8_port9_4: j8_port9grp4 {	/* CAN2 */
 			fsl,pins = <
 				MX6QDL_PAD_KEY_COL4__FLEXCAN2_TX             0x80000000
 				MX6QDL_PAD_KEY_ROW4__FLEXCAN2_RX             0x80000000
