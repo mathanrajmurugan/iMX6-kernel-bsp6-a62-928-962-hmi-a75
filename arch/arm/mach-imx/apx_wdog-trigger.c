@@ -597,7 +597,7 @@ void apx_wdog_trigger_early_init (const struct apx_wdog_trigger_data *apx_wdt_da
 	mutex_init (&wdt.ops_lock);
 	mutex_init (&wdt.ioctl_lock);
 
-	PIN_CONF_EN;
+	PIN_CONF_DIS;
 	imx6_wdog_refresh ();
 }
 

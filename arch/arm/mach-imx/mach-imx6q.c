@@ -593,7 +593,7 @@ static void __init imx6q_init_machine(void)
 	if ( of_machine_is_compatible("fsl,imx6q-SBC_A62") ||
 			of_machine_is_compatible("fsl,imx6dl-SBC_A62") ) {
 
-		apx_wdog_trigger_work_init(1);
+		apx_wdog_trigger_work_init(0);
 
 		/*  set clock CKO2 to use the USBH1 with external clock  */
 		np = of_find_node_by_path("/external_clocks");
